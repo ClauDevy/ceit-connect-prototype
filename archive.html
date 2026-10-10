@@ -66,7 +66,11 @@
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
             <span class="sidebar-label">Settings</span>
           </a>
-        </nav>
+          <a href="user-management.html" class="nav-item flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-700 dark:text-night-muted hover:bg-slate-100 dark:hover:bg-white/5 transition-colors">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <span class="sidebar-label">User Management</span>
+          </a>
+</nav>
       </div>
 
       <div>
@@ -837,6 +841,40 @@
 
   // ============================= INIT =============================
   renderArchiveGrid();
+</script>
+
+<nav id="app-mobile-nav" class="md:hidden fixed bottom-0 inset-x-0 z-30 bg-card dark:bg-night-card border-t border-slate-300/70 dark:border-white/10 flex items-stretch justify-around px-1 pt-1.5 pb-[calc(0.4rem+env(safe-area-inset-bottom))]">
+  <a href="index.html" class="mobile-link flex flex-col items-center justify-center gap-1 flex-1 py-1.5 text-slate-500 dark:text-night-muted"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9"/></svg><span class="text-[10px] font-medium">Home</span></a>
+  <a href="tasks.html" class="mobile-link flex flex-col items-center justify-center gap-1 flex-1 py-1.5 text-slate-500 dark:text-night-muted"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M9 3v4M15 3v4M4 10h16"/></svg><span class="text-[10px] font-medium">Tasks</span></a>
+  <a href="dashboard.html" class="mobile-link flex flex-col items-center justify-center gap-1 flex-1 py-1.5 text-slate-500 dark:text-night-muted"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="6"/><rect x="12" y="8" width="3" height="10"/><rect x="17" y="5" width="3" height="13"/></svg><span class="text-[10px] font-medium">Dashboard</span></a>
+  <a href="settings.html" class="mobile-link flex flex-col items-center justify-center gap-1 flex-1 py-1.5 text-slate-500 dark:text-night-muted"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg><span class="text-[10px] font-medium">Settings</span></a>
+  <button id="mobile-more-btn" type="button" class="mobile-link relative flex flex-col items-center justify-center gap-1 flex-1 py-1.5 text-council"><span class="absolute top-1 w-1.5 h-1.5 rounded-full bg-council"></span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg><span class="text-[10px] font-semibold">More</span></button>
+</nav>
+
+<div id="mobile-more-overlay" class="md:hidden fixed inset-0 z-40 bg-ink/40 dark:bg-black/60 hidden"></div>
+<div id="mobile-more-sheet" class="md:hidden fixed bottom-0 inset-x-0 z-50 translate-y-full transition-transform duration-200 bg-card dark:bg-night-card rounded-t-2xl p-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] shadow-2xl">
+  <div class="w-10 h-1.5 rounded-full bg-slate-300 dark:bg-white/15 mx-auto mb-2"></div>
+  <a href="archive.html" class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium hover:bg-slate-100 dark:hover:bg-white/5"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l4 4v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Z"/><path d="M9 13h6M9 17h6M9 9h2"/></svg>Event Archives</a>
+  <a href="activity-log.html" class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium hover:bg-slate-100 dark:hover:bg-white/5"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 2"/><circle cx="12" cy="12" r="9"/></svg>Activity Log</a>
+  <a href="user-management.html" class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium hover:bg-slate-100 dark:hover:bg-white/5"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>User Management</a>
+  <a href="notifications.html" class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium hover:bg-slate-100 dark:hover:bg-white/5"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>Notifications</a>
+  <a href="create-event.html" class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold text-council hover:bg-council-wash dark:hover:bg-night-wash"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>New Event</a>
+  <button id="mobile-more-close" type="button" class="w-full mt-1 rounded-xl py-2.5 text-sm font-semibold text-slate-500 dark:text-night-muted hover:bg-slate-100 dark:hover:bg-white/5">Close</button>
+</div>
+
+<script>
+  (function () {
+    var moreBtn = document.getElementById("mobile-more-btn");
+    var overlay = document.getElementById("mobile-more-overlay");
+    var sheet = document.getElementById("mobile-more-sheet");
+    var closeBtn = document.getElementById("mobile-more-close");
+    if (!moreBtn) return;
+    function openSheet() { overlay.classList.remove("hidden"); sheet.classList.remove("translate-y-full"); }
+    function closeSheet() { overlay.classList.add("hidden"); sheet.classList.add("translate-y-full"); }
+    moreBtn.addEventListener("click", openSheet);
+    closeBtn.addEventListener("click", closeSheet);
+    overlay.addEventListener("click", closeSheet);
+  })();
 </script>
 
 </body>

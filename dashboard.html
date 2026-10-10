@@ -62,7 +62,11 @@
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
           <span class="sidebar-label">Settings</span>
         </a>
-      </nav>
+        <a href="user-management.html" class="nav-item flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-700 dark:text-night-muted hover:bg-slate-100 dark:hover:bg-white/5 transition-colors">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <span class="sidebar-label">User Management</span>
+        </a>
+</nav>
     </div>
 
     <div>
@@ -160,6 +164,24 @@
         </div>
       </div>
 
+      <!-- SECONDARY ROW: Status breakdown + Upcoming deadlines -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+        <div class="rounded-2xl bg-card dark:bg-night-card border border-slate-300/60 dark:border-white/10 p-5 sm:p-6">
+          <h2 class="font-display font-semibold text-lg mb-1">Task Status Breakdown</h2>
+          <p class="text-xs text-slate-500 dark:text-night-muted mb-4">Council-wide, across every active event.</p>
+          <div class="flex items-center gap-6">
+            <svg id="status-donut" width="128" height="128" viewBox="0 0 128 128" class="shrink-0 -rotate-90"></svg>
+            <div id="status-legend" class="flex flex-col gap-2.5 flex-1"></div>
+          </div>
+        </div>
+
+        <div class="rounded-2xl bg-card dark:bg-night-card border border-slate-300/60 dark:border-white/10 p-5 sm:p-6">
+          <h2 class="font-display font-semibold text-lg mb-1">Upcoming Deadlines</h2>
+          <p class="text-xs text-slate-500 dark:text-night-muted mb-3">Closest due dates across all committees.</p>
+          <div id="deadlines-list" class="flex flex-col divide-y divide-slate-200/70 dark:divide-white/10"></div>
+        </div>
+      </div>
+
       <!-- WORKLOAD CHART CARD -->
       <div class="rounded-2xl bg-card dark:bg-night-card border border-slate-300/60 dark:border-white/10 p-5 sm:p-6 mb-6">
         <div class="flex items-start justify-between gap-3 flex-wrap mb-1">
@@ -200,29 +222,7 @@
     </main>
 
     <!-- Mobile bottom nav -->
-    <nav id="mobile-bottom-nav" class="md:hidden fixed bottom-0 left-0 right-0 z-30 bg-card/95 dark:bg-night-card/95 backdrop-blur border-t border-slate-300/70 dark:border-white/10 flex items-stretch justify-around px-1 pb-[env(safe-area-inset-bottom)]">
-      <a href="#" class="flex flex-col items-center justify-center gap-1 flex-1 py-2.5 text-slate-500 dark:text-night-muted">
-        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9"/></svg>
-        <span class="text-[10px] font-medium">Home</span>
-      </a>
-      <a href="#" class="flex flex-col items-center justify-center gap-1 flex-1 py-2.5 text-slate-500 dark:text-night-muted">
-        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M9 3v4M15 3v4M4 10h16"/></svg>
-        <span class="text-[10px] font-medium">Tasks</span>
-      </a>
-      <a href="#" class="flex flex-col items-center justify-center gap-1 flex-1 py-2.5 text-slate-500 dark:text-night-muted">
-        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 2"/><circle cx="12" cy="12" r="9"/></svg>
-        <span class="text-[10px] font-medium">Log</span>
-      </a>
-      <a href="#" class="active flex flex-col items-center justify-center gap-1 flex-1 py-2.5 relative">
-        <span class="bn-dot absolute top-1 w-1 h-1 rounded-full bg-council"></span>
-        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="6"/><rect x="12" y="8" width="3" height="10"/><rect x="17" y="5" width="3" height="13"/></svg>
-        <span class="text-[10px] font-semibold">Dashboard</span>
-      </a>
-      <a href="#" class="flex flex-col items-center justify-center gap-1 flex-1 py-2.5 text-slate-500 dark:text-night-muted">
-        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>
-        <span class="text-[10px] font-medium">More</span>
-      </a>
-    </nav>
+    
   </div>
 </div>
 
@@ -271,6 +271,19 @@
     { title:'Program Design Draft', committee:'COEXA', assignee:'Prince Bautista', level:'High' },
     { title:'Sound System Coordination', committee:'COFBUM', assignee:'Kyle Ramos', level:'High' }
   ];
+  var STATUS_DATA = [
+    { key: 'todo', label: 'To Do', count: 42, color: '#8B8072' },
+    { key: 'inProgress', label: 'In Progress', count: 38, color: '#EC6608' },
+    { key: 'completed', label: 'Completed', count: 23, color: '#059669' },
+    { key: 'confidential', label: 'Confidential', count: 11, color: '#6366F1' }
+  ];
+  var DEADLINES = [
+    { title: 'Vendor Coordination', event: 'Freshmen Orientation', committee: 'CARA', due: 'Today' },
+    { title: 'Confidential Task', event: 'Intramurals 2026', committee: 'COEXA', due: 'Tomorrow', masked: true },
+    { title: 'Stage Program Script', event: 'Freshmen Orientation', committee: 'COEXA', due: 'Sep 29' },
+    { title: 'Sponsorship Deck Review', event: 'UGAMES 2026', committee: 'CARA', due: 'Oct 1' },
+    { title: 'Backup Sound Equipment', event: 'UGAMES 2026', committee: 'COFBUM', due: 'Oct 3' }
+  ];
 
   function initials(name) { return name.split(' ').map(function (w) { return w[0]; }).join('').slice(0,2).toUpperCase(); }
   function committeeTotal(key) { return COMMITTEE_DATA[key].members.reduce(function (s,m) { return s + m.t; }, 0); }
@@ -296,6 +309,47 @@
           '<p class="text-xs text-slate-500 dark:text-night-muted mt-0.5">' + a.committee + ' · ' + a.assignee + '</p>' +
         '</div>' +
         '<span class="badge-pill ' + tone + ' shrink-0">' + a.level + '</span>' +
+      '</div>';
+    }).join('');
+  })();
+
+  // ================= Task status donut =================
+  (function fillStatusDonut() {
+    var total = STATUS_DATA.reduce(function (s, d) { return s + d.count; }, 0);
+    var r = 52, cx = 64, cy = 64, circumference = 2 * Math.PI * r;
+    var offset = 0;
+    var svg = document.getElementById('status-donut');
+    var parts = '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="none" stroke="currentColor" class="text-slate-200 dark:text-white/10" stroke-width="16"/>';
+    STATUS_DATA.forEach(function (d) {
+      var frac = d.count / total;
+      var len = frac * circumference;
+      parts += '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="none" stroke="' + d.color + '" stroke-width="16" ' +
+        'stroke-dasharray="' + len + ' ' + (circumference - len) + '" stroke-dashoffset="-' + offset + '" stroke-linecap="butt"/>';
+      offset += len;
+    });
+    svg.innerHTML = parts;
+
+    document.getElementById('status-legend').innerHTML = STATUS_DATA.map(function (d) {
+      var pct = Math.round((d.count / total) * 100);
+      return '<div class="flex items-center justify-between gap-2 text-sm">' +
+        '<span class="flex items-center gap-2 min-w-0"><span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:' + d.color + '"></span><span class="truncate">' + d.label + '</span></span>' +
+        '<span class="font-semibold shrink-0">' + d.count + ' <span class="text-slate-400 dark:text-night-muted/70 font-normal">(' + pct + '%)</span></span>' +
+      '</div>';
+    }).join('');
+  })();
+
+  // ================= Upcoming deadlines =================
+  (function fillDeadlines() {
+    var urgentWords = ['Today', 'Tomorrow'];
+    document.getElementById('deadlines-list').innerHTML = DEADLINES.map(function (d) {
+      var urgent = urgentWords.indexOf(d.due) > -1;
+      var name = d.masked ? '<span class="inline-flex items-center gap-1"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Confidential Task</span>' : d.title;
+      return '<div class="flex items-center justify-between gap-3 py-2.5">' +
+        '<div class="min-w-0">' +
+          '<p class="text-sm font-semibold truncate">' + name + '</p>' +
+          '<p class="text-xs text-slate-500 dark:text-night-muted mt-0.5">' + d.event + ' · ' + d.committee + '</p>' +
+        '</div>' +
+        '<span class="text-xs font-semibold shrink-0 ' + (urgent ? 'text-rose-500' : 'text-slate-500 dark:text-night-muted') + '">' + d.due + '</span>' +
       '</div>';
     }).join('');
   })();
@@ -408,5 +462,39 @@
 
   renderChart();
 </script>
+<nav id="app-mobile-nav" class="md:hidden fixed bottom-0 inset-x-0 z-30 bg-card dark:bg-night-card border-t border-slate-300/70 dark:border-white/10 flex items-stretch justify-around px-1 pt-1.5 pb-[calc(0.4rem+env(safe-area-inset-bottom))]">
+  <a href="index.html" class="mobile-link flex flex-col items-center justify-center gap-1 flex-1 py-1.5 text-slate-500 dark:text-night-muted"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9"/></svg><span class="text-[10px] font-medium">Home</span></a>
+  <a href="tasks.html" class="mobile-link flex flex-col items-center justify-center gap-1 flex-1 py-1.5 text-slate-500 dark:text-night-muted"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M9 3v4M15 3v4M4 10h16"/></svg><span class="text-[10px] font-medium">Tasks</span></a>
+  <a href="dashboard.html" class="mobile-link flex flex-col items-center justify-center gap-1 flex-1 py-1.5 text-council"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="6"/><rect x="12" y="8" width="3" height="10"/><rect x="17" y="5" width="3" height="13"/></svg><span class="text-[10px] font-semibold">Dashboard</span></a>
+  <a href="settings.html" class="mobile-link flex flex-col items-center justify-center gap-1 flex-1 py-1.5 text-slate-500 dark:text-night-muted"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg><span class="text-[10px] font-medium">Settings</span></a>
+  <button id="mobile-more-btn" type="button" class="mobile-link relative flex flex-col items-center justify-center gap-1 flex-1 py-1.5 text-slate-500 dark:text-night-muted"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg><span class="text-[10px] font-medium">More</span></button>
+</nav>
+
+<div id="mobile-more-overlay" class="md:hidden fixed inset-0 z-40 bg-ink/40 dark:bg-black/60 hidden"></div>
+<div id="mobile-more-sheet" class="md:hidden fixed bottom-0 inset-x-0 z-50 translate-y-full transition-transform duration-200 bg-card dark:bg-night-card rounded-t-2xl p-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] shadow-2xl">
+  <div class="w-10 h-1.5 rounded-full bg-slate-300 dark:bg-white/15 mx-auto mb-2"></div>
+  <a href="archive.html" class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium hover:bg-slate-100 dark:hover:bg-white/5"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l4 4v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Z"/><path d="M9 13h6M9 17h6M9 9h2"/></svg>Event Archives</a>
+  <a href="activity-log.html" class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium hover:bg-slate-100 dark:hover:bg-white/5"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 2"/><circle cx="12" cy="12" r="9"/></svg>Activity Log</a>
+  <a href="user-management.html" class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium hover:bg-slate-100 dark:hover:bg-white/5"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>User Management</a>
+  <a href="notifications.html" class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium hover:bg-slate-100 dark:hover:bg-white/5"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>Notifications</a>
+  <a href="create-event.html" class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold text-council hover:bg-council-wash dark:hover:bg-night-wash"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>New Event</a>
+  <button id="mobile-more-close" type="button" class="w-full mt-1 rounded-xl py-2.5 text-sm font-semibold text-slate-500 dark:text-night-muted hover:bg-slate-100 dark:hover:bg-white/5">Close</button>
+</div>
+
+<script>
+  (function () {
+    var moreBtn = document.getElementById("mobile-more-btn");
+    var overlay = document.getElementById("mobile-more-overlay");
+    var sheet = document.getElementById("mobile-more-sheet");
+    var closeBtn = document.getElementById("mobile-more-close");
+    if (!moreBtn) return;
+    function openSheet() { overlay.classList.remove("hidden"); sheet.classList.remove("translate-y-full"); }
+    function closeSheet() { overlay.classList.add("hidden"); sheet.classList.add("translate-y-full"); }
+    moreBtn.addEventListener("click", openSheet);
+    closeBtn.addEventListener("click", closeSheet);
+    overlay.addEventListener("click", closeSheet);
+  })();
+</script>
+
 </body>
 </html>
