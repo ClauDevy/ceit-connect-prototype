@@ -620,3 +620,86 @@ background: linear-gradient(135deg, #3A2013 0%, #221B15 55%, #17120E 100%);
 .animate-float, .animate-wave, .mascot-tail, .mascot-eyes-open, .mascot-eyes-closed { animation: none; }
 .mascot-eyes-closed { opacity: 0; }
 }
+
+/* ---------- Shared card and interaction system ---------- */
+:root {
+  --card-border: #ded8cf;
+  --card-shadow: 0 1px 2px rgba(27, 20, 15, 0.035);
+  --card-shadow-hover: 0 5px 14px -10px rgba(27, 20, 15, 0.24);
+  --focus-ring: rgba(168, 68, 10, 0.78);
+}
+
+.dark {
+  --card-border: rgba(255, 255, 255, 0.12);
+  --card-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+  --card-shadow-hover: 0 6px 16px -11px rgba(0, 0, 0, 0.55);
+  --focus-ring: #ffb266;
+}
+
+.bg-card.rounded-xl.border:not(.border-dashed),
+.bg-card.rounded-2xl.border:not(.border-dashed),
+.bg-card.rounded-3xl.border:not(.border-dashed) {
+  border-color: var(--card-border);
+  box-shadow: var(--card-shadow);
+}
+
+.event-card,
+.archive-card,
+.task-card,
+.log-card {
+  transition: border-color 160ms ease, background-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.event-card:hover,
+.archive-card:hover,
+.task-card:not(.is-locked):hover,
+.event-card:focus-visible,
+.archive-card:focus-visible,
+.task-card:focus-visible {
+  border-color: rgba(168, 68, 10, 0.34);
+  box-shadow: var(--card-shadow-hover);
+  transform: translateY(-1px);
+}
+
+.dark .event-card:hover,
+.dark .archive-card:hover,
+.dark .task-card:not(.is-locked):hover,
+.dark .event-card:focus-visible,
+.dark .archive-card:focus-visible,
+.dark .task-card:focus-visible {
+  border-color: rgba(255, 157, 71, 0.38);
+}
+
+.log-card:hover { background-color: rgba(91, 81, 71, 0.035); }
+.dark .log-card:hover { background-color: rgba(255, 255, 255, 0.035); }
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible,
+.role-card input:focus-visible + .role-card-inner,
+.appear-card input:focus-visible + .appear-card-inner {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+
+button:not(:disabled):active,
+a:active { transform: translateY(1px); }
+button:disabled { cursor: not-allowed; opacity: 0.52; }
+
+.card-skeleton {
+  background: linear-gradient(90deg, rgba(91, 81, 71, 0.06) 25%, rgba(91, 81, 71, 0.11) 50%, rgba(91, 81, 71, 0.06) 75%);
+  background-size: 200% 100%;
+  animation: card-skeleton-shimmer 1.4s ease-in-out infinite;
+}
+.dark .card-skeleton {
+  background-image: linear-gradient(90deg, rgba(255, 255, 255, 0.035) 25%, rgba(255, 255, 255, 0.075) 50%, rgba(255, 255, 255, 0.035) 75%);
+}
+@keyframes card-skeleton-shimmer { to { background-position: -200% 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .event-card, .archive-card, .task-card, .log-card { transition: none; }
+  .card-skeleton { animation: none; }
+}

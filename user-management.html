@@ -451,7 +451,8 @@
     sidebar.classList.toggle('collapsed');
     sidebarToggleIcon.style.transform = sidebar.classList.contains('collapsed') ? 'rotate(180deg)' : 'rotate(0deg)';
   });
-  document.getElementById('bottom-nav-more').addEventListener('click', function (e) {
+  var bottomNavMore = document.getElementById('bottom-nav-more');
+  if (bottomNavMore) bottomNavMore.addEventListener('click', function (e) {
     e.preventDefault();
     showToast('Event Archives & Settings are one tap away from Home → Menu');
   });
