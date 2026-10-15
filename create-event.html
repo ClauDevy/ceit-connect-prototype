@@ -153,8 +153,8 @@
           <circle cx="48" cy="46" r="3.2" fill="#1B140F"/><circle cx="72" cy="46" r="3.2" fill="#1B140F"/>
         </svg>
         <div>
-          <p class="font-display font-semibold text-base">Let's put your next event together</p>
-          <p class="text-xs text-slate-600 dark:text-night-muted mt-0.5">Fill in the details, break the work into phases, and launch when it's ready. Your progress autosaves as a Draft along the way.</p>
+          <p id="create-event-heading" class="font-display font-semibold text-base">Let's put your next event together</p>
+          <p id="create-event-intro" class="text-xs text-slate-600 dark:text-night-muted mt-0.5">Fill in the details, break the work into phases, and launch when it's ready. Your progress autosaves as a Draft along the way.</p>
         </div>
       </div>
 
@@ -1252,10 +1252,81 @@
     document.getElementById('ready-tiger').classList.toggle('flex', ready);
   }
 
-  document.getElementById('save-draft-btn').addEventListener('click', function () { showToast('Saved as Draft'); });
+  var homeDraftStorageKey = 'ceitHomeIntramuralsDraft';
+  var homeDraftEditMode = new URLSearchParams(window.location.search).get('editDraft') === 'home-intramurals-2026';
+  var homeDraftState = null;
+  if (homeDraftEditMode) {
+    try { homeDraftState = JSON.parse(sessionStorage.getItem(homeDraftStorageKey) || 'null'); } catch (error) { homeDraftState = null; }
+  }
+  if (homeDraftEditMode && homeDraftState) {
+    document.getElementById('mode-picker').classList.add('hidden');
+    document.getElementById('create-event-heading').textContent = 'Edit event draft';
+    document.getElementById('create-event-intro').textContent = 'Update event details, dates, phases, and tasks. Changes stay private until launch.';
+    document.getElementById('save-draft-btn').textContent = 'Save Draft Changes';
+    eventNameInput.value = homeDraftState.name || '';
+    eventStartInput.value = homeDraftState.startDate || '';
+    eventEndInput.value = homeDraftState.endDate || '';
+    eventDescInput.value = homeDraftState.description || '';
+    descCounter.textContent = eventDescInput.value.length + '/300';
+    if (Array.isArray(homeDraftState.phases)) {
+      phases = homeDraftState.phases;
+      allTasks = {};
+      taskSeq = 0;
+      phaseSeq = 0;
+      phases.forEach(function (phase, phaseIndex) {
+        phaseSeq = Math.max(phaseSeq, Number(String(phase.id).replace('phase-', '')) || phaseIndex + 1);
+        phase.number = phase.number || String(phaseIndex + 1).padStart(2, '0');
+        phase.tasks = Array.isArray(phase.tasks) ? phase.tasks : [];
+        phase.tasks.forEach(function (task) {
+          allTasks[task.id] = { name: task.name, phaseId: phase.id };
+          taskSeq = Math.max(taskSeq, Number(String(task.id).replace('t', '')) || 0);
+        });
+      });
+    }
+    if (homeDraftState.banner) {
+      bannerPreview.src = homeDraftState.banner;
+      bannerPreview.classList.remove('hidden');
+      bannerPlaceholder.classList.add('hidden');
+      document.getElementById('summary-banner-img').src = homeDraftState.banner;
+      document.getElementById('summary-banner-img').classList.remove('hidden');
+      document.getElementById('summary-banner-placeholder').classList.add('hidden');
+    }
+  }
+
+  function saveHomeDraft(status) {
+    var banner = bannerPreview.classList.contains('hidden') ? '' : bannerPreview.src;
+    var saved = {
+      id: 'home-intramurals-2026',
+      name: eventNameInput.value.trim(),
+      startDate: eventStartInput.value,
+      endDate: eventEndInput.value,
+      description: eventDescInput.value,
+      phases: phases,
+      banner: banner,
+      status: status,
+      lastEdited: new Date().toISOString()
+    };
+    try {
+      sessionStorage.setItem(homeDraftStorageKey, JSON.stringify(saved));
+      showToast(status === 'launched' ? 'Event launched' : 'Draft changes saved');
+      window.setTimeout(function () { window.location.href = 'index.html'; }, 350);
+    } catch (error) {
+      showToast('Could not save this draft in this browser session');
+    }
+  }
+
+  document.getElementById('save-draft-btn').addEventListener('click', function () {
+    if (homeDraftEditMode && homeDraftState) { saveHomeDraft('draft'); return; }
+    showToast('Saved as Draft');
+  });
   document.getElementById('launch-event-btn').addEventListener('click', function () {
     if (this.disabled) return;
-    showToast('Event launched — now visible to all committees');
+    if (homeDraftEditMode && homeDraftState) {
+      if (!window.confirm('Launching makes this event visible to all committees. Continue?')) return;
+      saveHomeDraft('launched');
+      return;
+    }
+    showToast('Event launched - now visible to all committees');
   });
 
   renderPhases();

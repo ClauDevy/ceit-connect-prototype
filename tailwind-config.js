@@ -3,7 +3,7 @@ tailwind.config = {
   theme: {
     extend: {
       colors: {
-        paper: '#FFF8F0',
+        paper: '#F1EEE8',
         card: '#FFFFFF',
         ink: '#1B140F',
         slate: { 100:'#F1ECE4', 300:'#DCD3C6', 500:'#8B8072', 700:'#5B5147' },
