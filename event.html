@@ -668,6 +668,7 @@
             <option value="KL">Kaye Lim</option>
             <option value="CS">Carlo Silva</option>
           </select>
+          <p id="task-form-workload" class="mt-1.5 text-[10.5px] leading-relaxed text-slate-500 dark:text-night-muted" aria-live="polite"></p>
         </div>
         <div>
           <label class="text-xs font-semibold text-slate-500 dark:text-night-muted mb-1.5 block">Due date</label>
@@ -1257,6 +1258,18 @@
     critical: ['bg-red-500', 'text-white', 'border-red-500']
   };
   var assigneeNames = { PR: 'Prince R.', JB: 'John Benedict', AS: 'Aira Santos', MR: 'Marco Reyes', KL: 'Kaye Lim', CS: 'Carlo Silva' };
+  function updateAssigneeWorkload() {
+    var name = assigneeNames[taskFormAssignee.value];
+    var message = document.getElementById('task-form-workload');
+    if (!name || !message) { if (message) message.textContent = 'Choose a member to see their current workload in this event.'; return; }
+    var count = Array.prototype.filter.call(document.querySelectorAll('.task-card'), function (card) {
+      return card.dataset.assignee === taskFormAssignee.value && card.dataset.status !== 'completed';
+    }).length;
+    message.textContent = count === 0 ? name + ' has no open tasks in this event.' : name + ' currently has ' + count + ' open task' + (count === 1 ? '' : 's') + ' assigned in this event.' + (count >= 5 ? ' High workload — consider assigning someone else.' : '');
+    message.classList.toggle('text-amber-700', count >= 5);
+    message.classList.toggle('dark:text-amber-400', count >= 5);
+  }
+  taskFormAssignee.addEventListener('change', updateAssigneeWorkload);
   var ACCESS_COLORS = ['#EC6608', '#A8440A', '#0EA5A0', '#6366F1', '#DB2777', '#65A30D', '#0284C7'];
   function accessColor(name) {
     var h = 0;
@@ -1392,6 +1405,8 @@
   function buildCardEl(data) {
     var div = document.createElement('div');
     div.className = 'task-card rounded-xl bg-card dark:bg-night-card border border-slate-300/60 dark:border-white/10 p-4 cursor-grab' + (data.status === 'completed' ? ' opacity-70' : '');
+    div.dataset.assignee = data.assignee || 'unassigned';
+    div.dataset.status = data.status || 'todo';
     if (data.callTime) {
       div.dataset.callTime = data.callTime;
       div.dataset.callDate = data.callDate || '';
@@ -1526,6 +1541,7 @@
       var avatarEl = card.querySelector('.flex.items-center.justify-between > div:first-child');
       var initials = avatarEl ? avatarEl.textContent.trim() : '';
       taskFormAssignee.value = assigneeNames.hasOwnProperty(initials) ? initials : 'unassigned';
+      updateAssigneeWorkload();
 
       taskFormDue.value = '';
       taskFormConfidential.checked = card.classList.contains('is-confidential');
@@ -1546,6 +1562,7 @@
       taskFormPhase.value = activeTab ? activeTab.dataset.phase : '1';
       taskFormStatus.value = 'todo';
       taskFormAssignee.value = 'unassigned';
+      updateAssigneeWorkload();
       taskFormDue.value = '';
       taskFormConfidential.checked = false;
       currentAccessList = [];
