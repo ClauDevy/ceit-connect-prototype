@@ -542,6 +542,7 @@
             <input id="assignee-search-input" type="text" placeholder="Search members…" class="w-full rounded-lg border border-slate-300 dark:border-white/15 bg-card dark:bg-white/5 pl-8 pr-3 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-council/40 focus:border-council">
           </div>
           <div id="task-assignees-list" class="flex flex-col gap-1 max-h-40 overflow-y-auto rounded-xl border border-slate-300 dark:border-white/15 bg-card dark:bg-white/5 p-2"></div>
+          <div id="assignee-workload-summary" class="hidden mt-2 rounded-lg border border-slate-200 dark:border-white/10 bg-white/70 dark:bg-white/[0.03] px-3 py-2 text-[11px] leading-relaxed text-slate-600 dark:text-night-muted" aria-live="polite"></div>
           <p class="text-[10.5px] text-slate-500 dark:text-night-muted mt-1.5">Tasks are unassigned by default and sit in the Backlog until someone claims or is given them.</p>
         </div>
       </div>
@@ -1119,9 +1120,12 @@
     var outside = pool.filter(function (m) { return m.committee !== committee; });
     function rowHTML(m) {
       var checked = currentSelectedAssignees.indexOf(m.name) !== -1 ? 'checked' : '';
+      var eventCount = getMemberOpenTaskCount(m.name);
+      var totalCount = m.active + eventCount;
+      var workloadTone = totalCount >= 5 ? 'text-red-600 dark:text-red-400' : totalCount >= 3 ? 'text-amber-700 dark:text-amber-400' : 'text-slate-500 dark:text-night-muted';
       return '<label class="flex items-center justify-between px-2 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5 cursor-pointer text-sm">' +
         '<span class="flex items-center gap-2"><input type="checkbox" value="' + m.name + '" class="assignee-checkbox accent-orange-600" ' + checked + '>' + m.name + '</span>' +
-        '<span class="text-[10.5px] text-slate-500 dark:text-night-muted">' + m.committee + ' · ' + m.active + ' active</span>' +
+        '<span class="text-right leading-tight"><span class="block text-[10.5px] text-slate-500 dark:text-night-muted">' + m.committee + '</span><span class="block text-[10px] ' + workloadTone + '">' + totalCount + ' open task' + (totalCount === 1 ? '' : 's') + '</span></span>' +
       '</label>';
     }
     var html = '';
@@ -1134,8 +1138,43 @@
         if (cb.checked) { if (currentSelectedAssignees.indexOf(cb.value) === -1) currentSelectedAssignees.push(cb.value); }
         else { currentSelectedAssignees = currentSelectedAssignees.filter(function (n) { return n !== cb.value; }); }
         if (document.getElementById('task-confidential-input').checked) renderAccessChips();
+        renderAssigneeWorkloadSummary();
       });
     });
+    renderAssigneeWorkloadSummary();
+  }
+
+  function getMemberOpenTaskCount(name) {
+    var count = 0;
+    Object.keys(allTasks).forEach(function (id) {
+      var task = allTasks[id];
+      if (task && task.status !== 'completed' && task.status !== 'done' && Array.isArray(task.assignees) && task.assignees.indexOf(name) !== -1) count++;
+    });
+    return count;
+  }
+
+  function renderAssigneeWorkloadSummary() {
+    var summary = document.getElementById('assignee-workload-summary');
+    if (!summary) return;
+    if (!currentSelectedAssignees.length) { summary.classList.add('hidden'); summary.textContent = ''; return; }
+    var overloaded = false;
+    var details = currentSelectedAssignees.map(function (name) {
+      var member = MEMBERS.find(function (m) { return m.name === name; });
+      var eventCount = getMemberOpenTaskCount(name);
+      var total = (member ? member.active : 0) + eventCount;
+      if (total >= 5) overloaded = true;
+      var nextDue = Object.keys(allTasks).map(function (id) { return allTasks[id]; }).filter(function (task) {
+        return task && task.status !== 'completed' && task.status !== 'done' && Array.isArray(task.assignees) && task.assignees.indexOf(name) !== -1 && task.due;
+      }).map(function (task) { return task.due; }).sort()[0];
+      var dueText = nextDue ? ' · next event task due ' + new Date(nextDue + 'T00:00:00').toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : '';
+      return name + ': ' + total + ' open tasks overall (' + eventCount + ' in this event)' + dueText;
+    });
+    summary.textContent = details.join('  |  ') + (overloaded ? ' · High workload: consider assigning someone else.' : '');
+    summary.classList.toggle('border-amber-300', overloaded);
+    summary.classList.toggle('dark:border-amber-700', overloaded);
+    summary.classList.toggle('text-amber-800', overloaded);
+    summary.classList.toggle('dark:text-amber-300', overloaded);
+    summary.classList.remove('hidden');
   }
   document.getElementById('assignee-search-input').addEventListener('input', function () { renderAssigneeList(this.value); });
 
