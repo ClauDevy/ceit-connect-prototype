@@ -138,8 +138,9 @@
           <p class="text-sm text-slate-500 dark:text-night-muted mt-1 max-w-xl">A secure, read-only audit trail of administrative actions and database changes across all 12 committees.</p>
         </div>
         <div class="flex items-center gap-2">
-          <button id="refresh-btn" class="w-9 h-9 rounded-xl border border-slate-300 dark:border-white/15 flex items-center justify-center text-slate-600 dark:text-night-muted hover:bg-slate-100 dark:hover:bg-white/5 transition-colors shrink-0" title="Refresh">
-            <svg id="refresh-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 2.6-6.35M3 4v5h5"/></svg>
+          <button id="refresh-btn" type="button" class="activity-refresh-button w-9 h-9 rounded-xl border border-slate-300 dark:border-white/15 flex items-center justify-center text-slate-600 dark:text-night-muted hover:bg-slate-100 dark:hover:bg-white/5 active:bg-council-wash dark:active:bg-night-wash focus-visible:text-council transition-colors shrink-0 disabled:opacity-60 disabled:cursor-wait" title="Refresh activity log" aria-label="Refresh activity log" aria-controls="log-tbody" aria-busy="false">
+            <svg id="refresh-icon" class="activity-refresh-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 2.6-6.35M3 4v5h5"/></svg>
+            <span id="refresh-status" class="sr-only" role="status" aria-live="polite"></span>
           </button>
           <button id="export-btn" class="flex items-center gap-1.5 rounded-xl bg-ink dark:bg-council-dark text-white font-semibold text-sm px-4 py-2.5 hover:bg-council-dark transition-colors shrink-0">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0-4-4m4 4 4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
@@ -310,7 +311,7 @@
 
 <!-- TOAST -->
 <div id="toast" class="toast toast-hidden fixed bottom-20 md:bottom-5 right-5 left-5 sm:left-auto z-50 flex items-center gap-2.5 rounded-xl bg-ink dark:bg-night-card border border-white/10 text-white px-4 py-3 shadow-xl text-sm">
-  <svg id="toast-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 text-emerald-400"><path d="M20 6 9 17l-5-5"/></svg>
+  <svg id="toast-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 feedback-success"><path d="M20 6 9 17l-5-5"/></svg>
   <span id="toast-text">Saved</span>
 </div>
 
@@ -352,8 +353,8 @@
     toastIcon.innerHTML = tone === 'error'
       ? '<circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/>'
       : '<path d="M20 6 9 17l-5-5"/>';
-    toastIcon.classList.toggle('text-emerald-400', tone !== 'error');
-    toastIcon.classList.toggle('text-red-400', tone === 'error');
+    toastIcon.classList.toggle('feedback-success', tone !== 'error');
+    toastIcon.classList.toggle('feedback-danger', tone === 'error');
     toast.classList.remove('toast-hidden');
     clearTimeout(toastTimer);
     toastTimer = setTimeout(function () { toast.classList.add('toast-hidden'); }, 3200);
@@ -366,7 +367,6 @@
     red: 'bg-red-50 text-red-600 dark:bg-red-500/10 dark:text-red-400',
     emerald: 'bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400',
     sky: 'bg-sky-50 text-sky-600 dark:bg-sky-500/10 dark:text-sky-400',
-    violet: 'bg-violet-50 text-violet-600 dark:bg-violet-500/10 dark:text-violet-400',
     council: 'bg-council-wash text-council-dark dark:bg-night-wash dark:text-council-light',
     slate: 'bg-slate-100 text-slate-600 dark:bg-white/10 dark:text-night-muted'
   };
@@ -390,7 +390,7 @@
     { key:'auth_failure', label:'AUTH FAILURE', tone:'red' },
     { key:'create_task', label:'CREATED TASK', tone:'emerald' },
     { key:'invite_user', label:'INVITED USER', tone:'sky' },
-    { key:'role_change', label:'ROLE CHANGED', tone:'violet' },
+    { key:'role_change', label:'ROLE CHANGED', tone:'council' },
     { key:'launch_event', label:'LAUNCHED EVENT', tone:'council' },
     { key:'complete_task', label:'COMPLETED TASK', tone:'emerald' },
     { key:'view_confidential', label:'VIEWED CONFIDENTIAL', tone:'slate' },
@@ -421,16 +421,36 @@
     { u:'Sys Admin', role:'System', a:'view_confidential', row:'Task ID: 6602', c:'President', s:'logged', ts:'2026-05-15T21:03:00', old:'—', neu:'Viewed by Admin override', ip:'System process', dev:'Supabase Edge Function' }
   ];
 
-  var logs = rawLogs.map(function (r, i) {
-    var action = ACTIONS.find(function (a) { return a.key === r.a; });
-    return {
-      id: i + 1,
-      ts: new Date(new Date(r.ts).getTime() + (NOW.getTime() - LOG_REFERENCE.getTime())),
-      user: r.u, role: r.role, initials: r.u.split(' ').map(function (w) { return w[0]; }).slice(0, 2).join('').toUpperCase(),
-      action: action, row: r.row, committee: r.c, status: r.s,
-      detail: { old: r.old, neu: r.neu, ip: r.ip, dev: r.dev, id: 'LOG-' + (100000 + i) }
-    };
-  });
+  function buildLogs(records) {
+    return records.map(function (r, i) {
+      var action = ACTIONS.find(function (a) { return a.key === r.a; });
+      return {
+        id: i + 1,
+        ts: new Date(new Date(r.ts).getTime() + (NOW.getTime() - LOG_REFERENCE.getTime())),
+        user: r.u, role: r.role, initials: r.u.split(' ').map(function (w) { return w[0]; }).slice(0, 2).join('').toUpperCase(),
+        action: action, row: r.row, committee: r.c, status: r.s,
+        detail: { old: r.old, neu: r.neu, ip: r.ip, dev: r.dev, id: 'LOG-' + (100000 + i) }
+      };
+    });
+  }
+  var logs = buildLogs(rawLogs);
+
+  function readActivityRecords() {
+    return new Promise(function (resolve, reject) {
+      setTimeout(function () {
+        try {
+          var stored = localStorage.getItem('ceitActivityLogRecords');
+          var records = stored === null ? rawLogs.slice() : JSON.parse(stored);
+          var valid = Array.isArray(records) && records.every(function (record) {
+            return record && ['u','role','a','row','c','s','ts','old','neu','ip','dev'].every(function (key) { return typeof record[key] === 'string'; }) &&
+              ACTIONS.some(function (action) { return action.key === record.a; }) && !isNaN(Date.parse(record.ts));
+          });
+          if (!valid) throw new Error('Invalid activity-log records');
+          resolve(records);
+        } catch (error) { reject(error); }
+      }, 250);
+    });
+  }
 
   function badge(action) {
     return '<span class="badge-pill ' + TONE[action.tone] + '"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">' + ICON[action.key] + '</svg>' + action.label + '</span>';
@@ -504,9 +524,9 @@
 
   function statusIcon(s, withLabel) {
     var map = {
-      logged:  { color:'text-emerald-600 dark:text-emerald-400', label:'Logged', svg:'<path d="m4.5 12.75 6 6 9-13.5"/>' },
-      flagged: { color:'text-amber-500', label:'Flagged', svg:'<path d="M10.3 3.9 2.6 17.1a1 1 0 0 0 .86 1.5h17.1a1 1 0 0 0 .86-1.5L13.7 3.9a1 1 0 0 0-1.74 0Z"/><path d="M12 9v4M12 16.5h.01"/>' },
-      blocked: { color:'text-red-500', label:'Blocked', svg:'<circle cx="12" cy="12" r="9"/><path d="m9 9 6 6M15 9l-6 6"/>' }
+      logged:  { color:'feedback-success', label:'Logged', svg:'<path d="m4.5 12.75 6 6 9-13.5"/>' },
+      flagged: { color:'feedback-warning', label:'Flagged', svg:'<path d="M10.3 3.9 2.6 17.1a1 1 0 0 0 .86 1.5h17.1a1 1 0 0 0 .86-1.5L13.7 3.9a1 1 0 0 0-1.74 0Z"/><path d="M12 9v4M12 16.5h.01"/>' },
+      blocked: { color:'feedback-danger', label:'Blocked', svg:'<circle cx="12" cy="12" r="9"/><path d="m9 9 6 6M15 9l-6 6"/>' }
     };
     var m = map[s] || map.logged;
     return '<span class="inline-flex items-center gap-1.5 ' + m.color + '" title="' + m.label + '"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">' + m.svg + '</svg>' + (withLabel ? '<span class="text-[11px] font-semibold">' + m.label + '</span>' : '') + '</span>';
@@ -724,10 +744,33 @@
   document.getElementById('empty-reset-btn').addEventListener('click', function () { resetFilters(); showToast('Filters reset'); });
 
   // ================= Refresh =================
-  document.getElementById('refresh-btn').addEventListener('click', function () {
-    var icon = document.getElementById('refresh-icon');
-    icon.classList.remove('spin-once'); void icon.offsetWidth; icon.classList.add('spin-once');
-    setTimeout(function () { render(); showToast('Activity log refreshed'); }, 500);
+  var refreshButton = document.getElementById('refresh-btn');
+  var refreshIcon = document.getElementById('refresh-icon');
+  var refreshStatus = document.getElementById('refresh-status');
+  var isRefreshing = false;
+  refreshButton.addEventListener('click', function () {
+    if (isRefreshing) return;
+    isRefreshing = true;
+    refreshButton.disabled = true;
+    refreshButton.setAttribute('aria-busy', 'true');
+    refreshIcon.classList.add('is-refreshing');
+    refreshStatus.textContent = 'Refreshing activity log.';
+    readActivityRecords().then(function (records) {
+      var refreshedLogs = buildLogs(records);
+      logs = refreshedLogs;
+      expanded.clear();
+      render();
+      refreshStatus.textContent = 'Activity log updated.';
+      showToast('Activity log refreshed');
+    }).catch(function () {
+      refreshStatus.textContent = 'Activity log refresh failed. Existing records were kept.';
+      showToast('Could not refresh activity log. Existing records were kept.', 'error');
+    }).finally(function () {
+      isRefreshing = false;
+      refreshButton.disabled = false;
+      refreshButton.setAttribute('aria-busy', 'false');
+      refreshIcon.classList.remove('is-refreshing');
+    });
   });
 
   // ================= Export CSV =================
@@ -785,5 +828,6 @@
   })();
 </script>
 
+<script src="app-footer.js"></script>
 </body>
 </html>
