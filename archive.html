@@ -515,9 +515,9 @@
     return '#8B8072';
   }
   function taskStatusStyle(status) {
-    if (status === 'Completed') return 'border-ok/40 text-ok dark:text-emerald-400 bg-ok-wash dark:bg-ok-dwash';
-    if (status === 'In Progress') return 'border-council/40 text-council-dark dark:text-council-light bg-council-wash dark:bg-night-wash';
-    return 'border-slate-300 dark:border-white/15 text-slate-600 dark:text-night-muted bg-slate-100 dark:bg-white/5';
+    if (status === 'Completed') return 'task-state-completed';
+    if (status === 'In Progress') return 'task-state-progress';
+    return 'task-state-todo';
   }
   function eventStatusStyle(status) {
     if (status === 'Completed') return 'border-ok/40 text-ok dark:text-emerald-400 bg-ok-wash dark:bg-ok-dwash';
@@ -877,5 +877,6 @@
   })();
 </script>
 
+<script src="app-footer.js"></script>
 </body>
 </html>
