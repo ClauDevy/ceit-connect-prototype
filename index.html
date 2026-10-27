@@ -354,8 +354,8 @@
 
 
 <script>
-  // Theme toggle — in-memory only for this prototype (no localStorage),
-  // defaults to the system preference on load.
+  // Theme toggle, saved across pages for this prototype.
+  // defaults to the system preference until a theme is selected.
   var htmlEl = document.documentElement;
   var themeLabel = document.getElementById('theme-label');
   var sunIcon = document.getElementById('theme-icon-sun');
@@ -363,8 +363,9 @@
   var sunIconsM = document.querySelectorAll('.theme-icon-sun-m');
   var moonIconsM = document.querySelectorAll('.theme-icon-moon-m');
 
-  function setTheme(dark) {
+  function setTheme(dark, persist) {
     htmlEl.classList.toggle('dark', dark);
+    if (persist !== false) { try { localStorage.setItem('ceitTheme', dark ? 'dark' : 'light'); } catch (error) {} }
     if (themeLabel) themeLabel.textContent = dark ? 'Dark mode' : 'Light mode';
     if (sunIcon && moonIcon) { sunIcon.classList.toggle('hidden', dark); moonIcon.classList.toggle('hidden', !dark); }
     sunIconsM.forEach(function (el) { el.classList.toggle('hidden', dark); });
@@ -374,7 +375,8 @@
   function toggleTheme() { setTheme(!htmlEl.classList.contains('dark')); }
 
   var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-  setTheme(prefersDark);
+  var savedTheme = null; try { savedTheme = localStorage.getItem('ceitTheme'); } catch (error) {}
+  setTheme(savedTheme === null || savedTheme === 'system' ? (prefersDark) : savedTheme === 'dark', false);
 
   var themeToggle = document.getElementById('theme-toggle');
   var themeToggleMobile = document.getElementById('theme-toggle-mobile');

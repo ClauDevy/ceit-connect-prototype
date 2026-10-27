@@ -1,4 +1,6 @@
 (function () {
+  var currentPage = window.location.pathname.split('/').pop().toLowerCase();
+  if (currentPage !== 'login.html') return;
   var footer = document.createElement('footer');
   footer.className = 'project-footer text-ink dark:text-night-text';
   footer.innerHTML =

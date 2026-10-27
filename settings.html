@@ -413,16 +413,20 @@
 <script>
   // ============================= THEME =============================
   var htmlEl = document.documentElement;
-  function applyTheme(dark) {
+  function applyTheme(dark, persist) {
     htmlEl.classList.toggle('dark', dark);
     document.getElementById('theme-icon-sun').classList.toggle('hidden', dark);
     document.getElementById('theme-icon-moon').classList.toggle('hidden', !dark);
     document.getElementById('theme-label').textContent = dark ? 'Dark mode' : 'Light mode';
   }
-  applyTheme(window.matchMedia('(prefers-color-scheme: dark)').matches);
+  var savedTheme = null; try { savedTheme = localStorage.getItem('ceitTheme'); } catch (error) {}
+  applyTheme(savedTheme === null || savedTheme === 'system' ? window.matchMedia('(prefers-color-scheme: dark)').matches : savedTheme === 'dark', false);
+  var appearanceChoice = document.querySelector('input[name="appearance"][value="' + (savedTheme || 'system') + '"]');
+  if (appearanceChoice) appearanceChoice.checked = true;
   document.getElementById('theme-toggle').addEventListener('click', function () {
     applyTheme(!htmlEl.classList.contains('dark'));
     document.querySelector('input[name="appearance"][value="' + (htmlEl.classList.contains('dark') ? 'dark' : 'light') + '"]').checked = true;
+    try { localStorage.setItem('ceitTheme', htmlEl.classList.contains('dark') ? 'dark' : 'light'); } catch (error) {}
   });
 
   var sidebar = document.getElementById('sidebar');
@@ -433,9 +437,12 @@
 
   document.querySelectorAll('input[name="appearance"]').forEach(function (radio) {
     radio.addEventListener('change', function () {
-      if (radio.value === 'dark') applyTheme(true);
-      else if (radio.value === 'light') applyTheme(false);
-      else applyTheme(window.matchMedia('(prefers-color-scheme: dark)').matches);
+      if (radio.value === 'dark') { applyTheme(true); try { localStorage.setItem('ceitTheme', 'dark'); } catch (error) {} }
+      else if (radio.value === 'light') { applyTheme(false); try { localStorage.setItem('ceitTheme', 'light'); } catch (error) {} }
+      else {
+        applyTheme(window.matchMedia('(prefers-color-scheme: dark)').matches);
+        try { localStorage.setItem('ceitTheme', 'system'); } catch (error) {}
+      }
       markDirty();
     });
   });

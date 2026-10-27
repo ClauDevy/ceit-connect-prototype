@@ -183,13 +183,15 @@
 <script>
   // ============================= THEME =============================
   var htmlEl = document.documentElement;
-  function applyTheme(dark) {
+  function applyTheme(dark, persist) {
     htmlEl.classList.toggle('dark', dark);
+    if (persist !== false) { try { localStorage.setItem('ceitTheme', dark ? 'dark' : 'light'); } catch (error) {} }
     document.getElementById('theme-icon-sun').classList.toggle('hidden', dark);
     document.getElementById('theme-icon-moon').classList.toggle('hidden', !dark);
     document.getElementById('theme-label').textContent = dark ? 'Dark mode' : 'Light mode';
   }
-  applyTheme(window.matchMedia('(prefers-color-scheme: dark)').matches);
+  var savedTheme = null; try { savedTheme = localStorage.getItem('ceitTheme'); } catch (error) {}
+  applyTheme(savedTheme === null || savedTheme === 'system' ? (window.matchMedia('(prefers-color-scheme: dark)').matches) : savedTheme === 'dark', false);
   document.getElementById('theme-toggle').addEventListener('click', function () { applyTheme(!htmlEl.classList.contains('dark')); });
   var sidebar = document.getElementById('sidebar');
   document.getElementById('sidebar-toggle').addEventListener('click', function () {

@@ -352,15 +352,17 @@
   var moonIcon = document.getElementById('theme-icon-moon');
   var sunIconsM = document.querySelectorAll('.theme-icon-sun-m');
   var moonIconsM = document.querySelectorAll('.theme-icon-moon-m');
-  function setTheme(dark) {
+  function setTheme(dark, persist) {
     htmlEl.classList.toggle('dark', dark);
+    if (persist !== false) { try { localStorage.setItem('ceitTheme', dark ? 'dark' : 'light'); } catch (error) {} }
     if (themeLabel) themeLabel.textContent = dark ? 'Dark mode' : 'Light mode';
     if (sunIcon && moonIcon) { sunIcon.classList.toggle('hidden', dark); moonIcon.classList.toggle('hidden', !dark); }
     sunIconsM.forEach(function (el) { el.classList.toggle('hidden', dark); });
     moonIconsM.forEach(function (el) { el.classList.toggle('hidden', !dark); });
   }
   function toggleTheme() { setTheme(!htmlEl.classList.contains('dark')); }
-  setTheme(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  var savedTheme = null; try { savedTheme = localStorage.getItem('ceitTheme'); } catch (error) {}
+  setTheme(savedTheme === null || savedTheme === 'system' ? (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) : savedTheme === 'dark', false);
   document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
   document.getElementById('theme-toggle-mobile').addEventListener('click', toggleTheme);
 
